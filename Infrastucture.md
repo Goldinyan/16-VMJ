@@ -13,7 +13,7 @@ VIRTUAL MEMORY (RAM):
 
 - Data Registers (16 Bit, 0 - 65.535)
   - R0 - R15 (General Purpose)
-  !NOTE: Convention for SYSCALLS: R0 = Service Mode ID, R1 = Service Argument
+   !NOTE: Convention for SYSCALLS: R0 = Service Mode ID, R1 = Service Argument
    !NOTE: Two-Step Assembler needs one reg for mem address of loop, so if no one is empty,
    we push one to the stack, which is not used in the loop, and after we finish we load it back
   - Special Purpose Register (SPR)
@@ -120,14 +120,19 @@ Addressing Modes:
 10. DIV     - 0x9123 - DIV R1, R2, R3    - R1 = R2 / R3 (triggers Interrupt ID 0 if R3 == 0)
 11. AND     - 0xA123 - AND R1, R2, R3    - Bitwise AND: R1 = R2 & R3
 12. OR      - 0xB123 - OR R1, R2, R3     - Bitwise OR: R1 = R2 | R3
-13. CMP     - 0xC012 - CMP R1, R2        - Compares R1 with R2 -> sets Z-Flag if R1 == R2
-14. JMP     - 0xD0R1 - JMP R1            - Unconditional jump to address in R1
+13. CMP     - 0xCR12 - CMP R1, R2        - Compares R1 with R2 -> sets Z-Flag if R1 == R2
+
+14. JMP     - 0xDR10 - JMP R1            - Unconditional jump to address in R1
+
+! NOTE: second half of first byte is to distingush bewtween JE and JNE so watch out
 15. JE      - 0xE0R1 - JE R1             - Jump to address in R1 if Z-Flag == 1
 16. JNE     - 0xE1R1 - JNE R1            - Jump to address in R1 if Z-Flag == 0
+
 17. CALL    - 0xF0R1 - CALL R1           - Decrements SP by 2, writes current PC to [SP], sets PC = R1
 18. RET     - 0xF100 - RET               - Pops return address from stack into PC (SP += 2)
-19. PUSH    - 0xF200 - PUSH R1           - Decrements SP by 2 and writes R1 to [SP]
-20. POP     - 0xF300 - POP R1            - Reads [SP] into R1 and increments SP by 2
+19. PUSH    - 0xF2R1 - PUSH R1           - Decrements SP by 2 and writes R1 to [SP]
+
+20. POP     - 0xF3R1 - POP R1            - Reads [SP] into R1 and increments SP by 2
 21. IRET    - 0xF400 - IRET              - Pops return address from stack into PC (SP += 2) after Interrupt
 22. SYS     - 0xF500 - SYS               - Triggers System Call:
                                          - Reads R0 for Mode ID:

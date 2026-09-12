@@ -1,0 +1,2 @@
+LOADI R1, 0x05
+LOADI R2, 0x40
