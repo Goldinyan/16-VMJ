@@ -1,6 +1,13 @@
 public class Assembler {
     public static final int PARSE_ERROR = Integer.MIN_VALUE;
 
+    public static final int MAX_FUNCS = 40;
+    public static String[] funcMap = new String[MAX_FUNCS];
+    public static int funcCount = 0;
+    public static String currentFuncName = null;
+
+    
+
     public enum Instruction {
         NOP,
         LOADI,
@@ -33,9 +40,17 @@ public class Assembler {
         int i = 0;
 
         for (String instruction : instructions) {
+            bool funcBody = instructions.startsWith(" ");
             String[] parts = instruction.split(" ");
+
+            if(!funcBody) {
+                    
+            }
+            
+            
             Instruction opcode = Instruction.valueOf(parts[0]);
 
+            
             switch (opcode) {
                 case NOP -> {
                     bytes[i++] = 0x00;
