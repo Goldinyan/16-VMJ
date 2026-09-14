@@ -197,6 +197,7 @@ main:
   LOADI r15, 0x1A      ; assumes loop is adress 0x1A in RAm
                        ; Normally the "two part assembler" does this work, he looks after
                        ; the label 'loop:' finds byte adress in ram and files it in
+                       ; you just write JE LOOP
 
 LOOP:
   ADD r13, r13, r14    ; r13 = r13 + 1
@@ -207,3 +208,6 @@ LOOP:
 ; termination
   NOP                  ; do nothing
   HALT                 ; stop execution
+
+
+
