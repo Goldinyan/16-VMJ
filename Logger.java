@@ -29,4 +29,19 @@ public class Logger {
         };
         System.out.println(logLevel + "[" + level + "] " + message + RESET);
     }
+
+    public static void logParseError(ParseResult err, int currentLine) {
+        switch (err) {
+            case SUCCESS -> Logger.log(Logger.LogLevel.WARNING,
+                "Line " + currentLine + ": Trying to log a succesful ParseResult");
+            case INVALID_REGISTER -> Logger.log(Logger.LogLevel.ERROR, 
+                "Line " + currentLine + ": Invalid register identifier");
+            case INVALID_IMMEDIATE -> Logger.log(Logger.LogLevel.ERROR, 
+                "Line " + currentLine + ": Immediate value out of bounds");
+            case SYNTAX_ERROR -> Logger.log(Logger.LogLevel.ERROR, 
+                "Line " + currentLine + ": Wrong syntax or missing operands");
+            default -> Logger.log(Logger.LogLevel.ERROR, 
+                "Line " + currentLine + ": Parsing failed (" + result + ")");
+        }
+    }
 }
