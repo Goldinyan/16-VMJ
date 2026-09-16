@@ -24,7 +24,11 @@ public class <T> ParseReturn {
     public ParseResult result;
     public T value;
 
-    public
+    public boolean isOk() {
+        return result == ParseResult.SUCCESS;
+    }
+
+    public ParseResult
         
 
 }
