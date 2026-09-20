@@ -1,5 +1,9 @@
-  LOADI R1, 0x05
-  LOADI R2, 0x40
+LOADI R1, 0x05
+LOADI R2, 0x40
+JMP loop
+
+loop: 
+  LOADI R9, 0x00
 
 
 

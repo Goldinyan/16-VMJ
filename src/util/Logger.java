@@ -1,3 +1,6 @@
+package util;
+import parsing.ParseError;
+
 public class Logger {
 
     public enum LogLevel {
@@ -30,18 +33,18 @@ public class Logger {
         System.out.println(logLevel + "[" + level + "] " + message + RESET);
     }
 
-    public static void logParseError(ParseResult err, int currentLine) {
+    public static void logParseError(ParseError err, int currentLine) {
         switch (err) {
-            case SUCCESS -> Logger.log(Logger.LogLevel.WARNING,
-                "Line " + currentLine + ": Trying to log a succesful ParseResult");
             case INVALID_REGISTER -> Logger.log(Logger.LogLevel.ERROR, 
                 "Line " + currentLine + ": Invalid register identifier");
             case INVALID_IMMEDIATE -> Logger.log(Logger.LogLevel.ERROR, 
                 "Line " + currentLine + ": Immediate value out of bounds");
             case SYNTAX_ERROR -> Logger.log(Logger.LogLevel.ERROR, 
                 "Line " + currentLine + ": Wrong syntax or missing operands");
+            case SYMBOL_NOT_FOUND -> Logger.log(Logger.LogLevel.ERROR, 
+                "Line " + currentLine + ": Symbol not found");
             default -> Logger.log(Logger.LogLevel.ERROR, 
-                "Line " + currentLine + ": Parsing failed (" + result + ")");
+                "Line " + currentLine + ": Parsing failed (" + ")");
         }
     }
 }

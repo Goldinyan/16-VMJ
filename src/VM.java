@@ -1,8 +1,8 @@
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
+import util.Logger;
 
 public class VM {
     private final CPU cpu = new CPU();
@@ -58,6 +58,7 @@ public class VM {
     }
 
     private String[] getFile(String filename) {
+
         if (!filename.endsWith(".casm")) {
             Logger.log(Logger.LogLevel.ERROR, "Invalid file extension: " + filename);
             Logger.log(Logger.LogLevel.ERROR, "File extension must be .casm");
@@ -66,34 +67,19 @@ public class VM {
 
         File file = new File(filename);
         if (!file.exists()) {
-            Logger.log(Logger.LogLevel.ERROR, "File not found: " + filename);
+            Logger.log(Logger.LogLevel.ERROR, "File not found: " + file.getAbsolutePath());
             return null;
         }
 
-        int lineCount = 0;
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            while (reader.readLine() != null) {
-                lineCount++;
-            }
+        try {
+            List<String> lines = java.nio.file.Files.readAllLines(file.toPath());
+            loaded = true;
+            return lines.toArray(String[]::new);
         } catch (IOException e) {
-            Logger.log(Logger.LogLevel.ERROR, "Error counting lines: " + e.getMessage());
+            Logger.log(Logger.LogLevel.ERROR, "Error reading file: " + e.getMessage());
             return null;
         }
 
-        String[] lines = new String[lineCount];
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            int i = 0;
-            while ((line = reader.readLine()) != null) {
-                lines[i++] = line;
-            }
-        } catch (IOException e) {
-            Logger.log(Logger.LogLevel.ERROR, "Error reading lines: " + e.getMessage());
-            return null;
-        }
-
-        loaded = true;
-        return lines;
     }
 
     private void loadFile(String filename) {
@@ -104,11 +90,12 @@ public class VM {
 
         loaded = true;
 
-        byte[] rom = assembler.parse(instructions);
+        byte[] rom = assembler.assemble(instructions);
+        int byteCount = assembler.getByteCount();
 
         if (rom != null) {
             System.out.print("ROM Bytes [Hex]: ");
-            for (int i = 0; i < rom.length; i++) {
+            for (int i = 0; i < byteCount; i++) {
                 System.out.format("%02X ", rom[i] & 0xFF);
                 if ((i + 1) % 2 == 0) {
                     System.out.print("| ");
